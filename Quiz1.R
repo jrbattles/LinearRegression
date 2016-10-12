@@ -7,19 +7,16 @@
 # w <- c(2, 1, 3, 1)
 
 # Give the value of mu that minimizes the least squares equation sum (1 to n) = wi(xi - u) ^2
+x <- c(0.18, -1.54, 0.42, 0.95)
+w <- c(2, 1, 3, 1)
 
-question1 <- function (){
-    
-    x <- c(0.18, -1.54, 0.42, 0.95)
-    w <- c(2, 1, 3, 1)
-    minFun <- function(u) {sum(w * (x - u)^2)}
-    
-    # The interval must cover all of the possible given answers. (1.077, 0.0025, 0.1471, 0.300)
-    optimize(minFun, interval=c(0, 1.1), maximum=FALSE)["minimum"]
-}
+minu <- sum(x*w) / sum(w)
+final <- sum(w*(x-minu)^2)
+c(minu, final)
 
-# $minimum
-# [1] 0.1471429
+mu <- c(0.1471, 1.077, 0.0025, 0.300)
+for (v in mu)
+{print( c(v, sum(w*(x-v)^2)) )}
 
 # Question 2
 ## Consider the following data set
@@ -30,14 +27,20 @@ question1 <- function (){
 ## the outcome and x as the regressor. (Hint, do not center the data since 
 ## we want regression through the origin, not through the means of the data.)
 
-question2 <- function(){
+x <- c(0.8, 0.47, 0.51, 0.73, 0.36, 0.58, 0.57, 0.85, 0.44, 0.42)
+y <- c(1.39, 0.72, 1.55, 0.48, 1.19, -1.59, 1.23, -0.65, 1.49, 0.05)
+
+x <- c(x,x*-1)
+y <- c(y,y*-1)
+mean(y)
     
-    x <- c(0.8, 0.47, 0.51, 0.73, 0.36, 0.58, 0.57, 0.85, 0.44, 0.42)     # x as regressor
-    y <- c(1.39, 0.72, 1.55, 0.48, 1.19, -1.59, 1.23, -0.65, 1.49, 0.05)  # y as outcome
-    
-    coef(lm(y ~ x - 1)) # -1 since we want the regression through the origin
+## these 2 areq equivalent calculations for slope
+coef(lm(y ~ x - 1)) 
+cor(x,y) *sd(y)/sd(x)
+
+# -1 since we want the regression through the origin
     #lm function https://stat.ethz.ch/R-manual/R-patched/library/stats/html/lm.html
-}
+
 
 # 0.8263  
 
@@ -59,6 +62,13 @@ question3 <- function()
     beta1
 }
 
+## alternatively for Question 3
+data(mtcars)
+head(mtcars)
+x <- mtcars$wt
+y <- mtcars$mpg
+cor(x,y) *sd(y)/sd(x)
+
 # Question 4
 # Consider data with an outcome (Y) and a predictor (X). 
 # The standard deviation of the predictor is one half that of the outcome. 
@@ -72,6 +82,10 @@ question3 <- function()
 # B1 = C(Y,X) x ------- = 0.5 x ------------= 1
 #                Sd(x)              Sd(x)
 
+sx <- 1/2
+sy <- 1
+cor <- .5
+cor * sy / sx
 
 # Question 5
 # Students were given two hard tests and scores were normalized to have empirical
@@ -103,6 +117,12 @@ question3 <- function()
 # (to have mean 0 and variance 1)?
 
 # Normalizing data (xi - Mean(x)) / Sd(x)
+
+x <- c(8.58, 10.46, 9.01, 9.64, 8.86)
+zx <- (x-mean(x)) / sd(x)
+zx[1]
+
+## or alternatively
 
 question6 <- function()
 {
@@ -163,6 +183,14 @@ question9 <- function(){
     mean (x)
 }
 #[1] 0.573
+x <- c(0.8, 0.47, 0.51, 0.73, 0.36, 0.58, 0.57, 0.85, 0.44, 0.42)
+mean(x)
+
+for(u in c(0.573, 0.8, 0.36, 0.44))
+{
+    SSE <- sum((x-u)^2)
+    print(c(u, SSE))
+}
 
 # Question 10
 
